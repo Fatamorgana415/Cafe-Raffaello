@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="uk">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Форма зворотного зв'язку — Кафе "Рафаелло"</title>
+        <link rel="stylesheet" href="style.css">
+        <meta name="description" content="Форма для бронювання столика або залишення відгуку для кафе Рафаелло">
+    </head>
+    <body>
+        <main>
+            <h1>Зв'яжіться з нами</h1>
+            <p>Заповніть форму нижче — ми відповімо якнайшвидше.</p>
+        </main>
+        <form id="contactForm" action="/submit-form" method="post" enctype="multipart/form-data" novalidate>
+            <!-- Тип запиту: бронювання або запит -->
+             <fieldset>
+                <legend>Тип звернення</legend>
+                <label>
+                    <input type="radio" name="request_type" value="reservation" checked>
+                    Бронювання столика
+                </label>
+                <label>
+                    <input type="radio" name="request_type" value="inquiry">
+                    Запит/Інше
+                </label>
+            </fieldset>
+            <!-- Контактні дані -->
+             <label for="name">Ім'я та прізвище<span aria-hidden="true">*</span></label>
+             <input id="name" name="name" type="text" placeholder="Іван Петренко" required>
+             <label for="email">Електронна пошта<span aria-hidden="true">*</span></label>
+             <input id="email" name="email" type="email" placeholder="example@domain.com" required>
+             <label for="phone">Телефон</label>
+             <input id="phone" name="phone" type="tel" placeholder="+38 (0XX) XXX-XX-XX" pattern="[0-9+()\-\s]{6,}" aria-describedby="phoneHelp">
+             <small id="phoneHelp">Формат необов'язковий, але бажаний для підтвердження бронювання.</small>
+             <!-- Деталі бронювання -->
+              <fieldset>
+                <legend>Деталі бронювання</legend>
+                <label for="date">Дата</label>
+                <input id="date" name="date" type="date">
+                <label for="time">Час</label>
+                <input id="time" name="time" type="time">
+                <label for="guests">Кількість гостей</label>
+                <input id="guests" name="guests" type="number" min="1" max="20" value="2">
+            </fieldset>
+
+            <!-- Повідомлення -->
+             <label for="message">Повідомлення</label>
+             <textarea id="message" name="message" rows="6" placeholder="Напишіть вашу побажання, наприклад: Потрібен столик біля вікна"></textarea>
+             <!-- Додаткові опції -->
+              <label>
+                <input type="checkbox" name="newsletter" value="yes">
+                Підписатися на розсилку акцій та новинок
+            </label>
+            <label for="file">Додати файл (наприклад меню або документ для кейтерингу)</label>
+            <input id="file" name="file" type="file" accept="image/*,application/pdf">
+            <!-- Невидиме поле для ботів -->
+             <div style="position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;">
+                <label for="website">Якщо ви людина, залиште це поле порожнім</label>
+                <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+            </div>
+            <button type="submit">Відправити</button>
+        </form>
+        <section id="note">
+            <h2>Примітка про конфіденційність</h2>
+            <p>Надана інформація використовуватиметься лише для обробки вашого запиту та не передаватиметься третім особам без вашої згоди.</p>
+        </section>
+        <script>
+        // Проста клієнтська валідація перед відправкою
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            // Приклад: перевірити, що при бронюванні вказано дату та час
+            var form = e.target;
+            var type = form.request_type.value;
+            var date = form.date.value;
+            var time = form.time.value;
+            if (type === 'reservation' && (!date || !time)) {
+                e.preventDefault();
+                alert('Для бронювання, будь ласка, вкажіть дату та час.');
+                return false;
+            }
+            // Якщо поле-майстер для ботів заповнене — блокуємо відправку
+            if (form.website.value) {
+                e.preventDefault();
+                return false;
+            }
+            // Якщо потрібно, тут можна додати AJAX-відправку замість стандартної
+            });
+            </script>
+    </body>
+</html>
